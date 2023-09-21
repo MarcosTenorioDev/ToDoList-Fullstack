@@ -20,7 +20,7 @@ function App() {
               {" "}
               <input
                 type="checkbox"
-                checked={todo.status}
+                defaultChecked={todo.status}
                 onClick={() => {
                   modifyStatusTodo(todo);
                 }}
