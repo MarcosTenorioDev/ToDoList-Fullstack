@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import axios from "axios";
 
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -46,7 +47,7 @@ function App() {
   };
 
   async function getTodos() {
-    const response = await axios.get("http://localhost:3333/todos");
+    const response = await axios.get("https://extinct-nightgown-bear.cyclic.app/todos");
     setTodos(response.data);
   }
 
@@ -55,7 +56,7 @@ function App() {
   };
 
   const editTodo = async () => {
-    const response = await axios.put("http://localhost:3333/todos", {
+    const response = await axios.put("https://extinct-nightgown-bear.cyclic.app/todos", {
       id: selectedTodo.id,
       name: inputValue,
     });
@@ -66,7 +67,7 @@ function App() {
   };
 
   async function addTodos() {
-    const response = await axios.post("http://localhost:3333/todos", {
+    const response = await axios.post("https://extinct-nightgown-bear.cyclic.app/todos", {
       name: inputValue,
     });
     console.log(response);
@@ -77,12 +78,12 @@ function App() {
 
   async function deleteTodo(todo) {
     const id = todo.id;
-    const response = await axios.delete(`http://localhost:3333/todos/${id}`);
+    const response = await axios.delete(`https://extinct-nightgown-bear.cyclic.app/todos/${id}`);
     getTodos();
   }
 
   async function modifyStatusTodo(todo) {
-    const response = await axios.put("http://localhost:3333/todos", {
+    const response = await axios.put("https://extinct-nightgown-bear.cyclic.app/todos", {
       id: todo.id,
       status: !todo.status,
     });
