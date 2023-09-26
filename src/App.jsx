@@ -47,7 +47,7 @@ function App() {
   };
 
   async function getTodos() {
-    const response = await axios.get("https://extinct-nightgown-bear.cyclic.app/todos");
+    const response = await axios.get("https://adorable-worm-cap.cyclic.cloud/todos");
     setTodos(response.data);
   }
 
@@ -56,7 +56,7 @@ function App() {
   };
 
   const editTodo = async () => {
-    const response = await axios.put("https://extinct-nightgown-bear.cyclic.app/todos", {
+    const response = await axios.put("https://adorable-worm-cap.cyclic.cloud/todos", {
       id: selectedTodo.id,
       name: inputValue,
     });
@@ -67,7 +67,7 @@ function App() {
   };
 
   async function addTodos() {
-    const response = await axios.post("https://extinct-nightgown-bear.cyclic.app/todos", {
+    const response = await axios.post("https://adorable-worm-cap.cyclic.cloud/todos", {
       name: inputValue,
     });
     console.log(response);
@@ -78,12 +78,12 @@ function App() {
 
   async function deleteTodo(todo) {
     const id = todo.id;
-    const response = await axios.delete(`https://extinct-nightgown-bear.cyclic.app/todos/${id}`);
+    const response = await axios.delete(`https://adorable-worm-cap.cyclic.cloud/todos/${id}`);
     getTodos();
   }
 
   async function modifyStatusTodo(todo) {
-    const response = await axios.put("https://extinct-nightgown-bear.cyclic.app/todos", {
+    const response = await axios.put("https://adorable-worm-cap.cyclic.cloud/todos", {
       id: todo.id,
       status: !todo.status,
     });
