@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import axios from "axios";
-
+import { Spinner } from "@chakra-ui/spinner";
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [inputVisibility, setInputVisibility] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState();
+  const [loading, setLoading] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false)
 
   const ToDo = ({ todo }) => {
     return (
@@ -47,8 +49,13 @@ function App() {
   };
 
   async function getTodos() {
-    const response = await axios.get("https://adorable-worm-cap.cyclic.cloud/todos");
+    setLoading(true);
+    const response = await axios.get(
+      "https://adorable-worm-cap.cyclic.cloud/todos"
+    );
     setTodos(response.data);
+    setLoading(false);
+    setBtnDisabled(false)
   }
 
   const handleButton = () => {
@@ -56,10 +63,15 @@ function App() {
   };
 
   const editTodo = async () => {
-    const response = await axios.put("https://adorable-worm-cap.cyclic.cloud/todos", {
-      id: selectedTodo.id,
-      name: inputValue,
-    });
+    setLoading(true);
+    setBtnDisabled(true)
+    const response = await axios.put(
+      "https://adorable-worm-cap.cyclic.cloud/todos",
+      {
+        id: selectedTodo.id,
+        name: inputValue,
+      }
+    );
     setInputVisibility(false);
     setSelectedTodo();
     getTodos();
@@ -67,9 +79,13 @@ function App() {
   };
 
   async function addTodos() {
-    const response = await axios.post("https://adorable-worm-cap.cyclic.cloud/todos", {
-      name: inputValue,
-    });
+    setBtnDisabled(true)
+    const response = await axios.post(
+      "https://adorable-worm-cap.cyclic.cloud/todos",
+      {
+        name: inputValue,
+      }
+    );
     console.log(response);
     getTodos();
     setInputVisibility(!inputVisibility);
@@ -77,16 +93,22 @@ function App() {
   }
 
   async function deleteTodo(todo) {
+    setLoading(true);
     const id = todo.id;
-    const response = await axios.delete(`https://adorable-worm-cap.cyclic.cloud/todos/${id}`);
+    const response = await axios.delete(
+      `https://adorable-worm-cap.cyclic.cloud/todos/${id}`
+    );
     getTodos();
   }
 
   async function modifyStatusTodo(todo) {
-    const response = await axios.put("https://adorable-worm-cap.cyclic.cloud/todos", {
-      id: todo.id,
-      status: !todo.status,
-    });
+    const response = await axios.put(
+      "https://adorable-worm-cap.cyclic.cloud/todos",
+      {
+        id: todo.id,
+        status: !todo.status,
+      }
+    );
     getTodos();
   }
 
@@ -105,7 +127,13 @@ function App() {
         <div className="w-full border-2 text-center border-white bg-slate-500 p-2 mb-6 md:p-4">
           <h1 className="text-2xl text-white font-semibold">Daily Tasks</h1>
         </div>
-        <ToDo todo={todos} />
+        {loading ? (
+          <div className="w-full h-5/6 flex justify-center items-center border-2">
+            <Spinner color="red.500" w="50px" h="50px" />
+          </div>
+        ) : (
+          <ToDo todo={todos} />
+        )}
       </header>
 
       <div className="flex flex-col items-center md:w-[350px]">
@@ -124,7 +152,7 @@ function App() {
         />
 
         <button
-          className="bg-slate-500 p-4 rounded-2xl whitespace-nowrap border-[1px] border-white text-white font-semibold mt-8"
+          className={btnDisabled? "bg-slate-500 p-4 rounded-2xl whitespace-nowrap border-[1px] border-white text-white font-semibold mt-8 opacity-20" : "bg-slate-500 p-4 rounded-2xl whitespace-nowrap border-[1px] border-white text-white font-semibold mt-8"}
           onClick={() => {
             inputVisibility
               ? selectedTodo
@@ -132,6 +160,7 @@ function App() {
                 : addTodos()
               : handleButton();
           }}
+          disabled={btnDisabled}
         >
           {inputVisibility ? "Confirmar" : "+ Nova tarefa"}
         </button>
